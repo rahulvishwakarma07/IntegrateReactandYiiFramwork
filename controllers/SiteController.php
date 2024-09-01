@@ -25,7 +25,7 @@ class SiteController extends Controller
                 'class' => AccessControl::class,
                 'rules' => [
                     [
-                        'actions' => ['login', 'signup'], // Allow access to login and signup for everyone
+                        'actions' => ['login','signup'], // Allow access to login and signup for everyone
                         'allow' => true,
                         'roles' => ['?'], // Guest users
                     ],
@@ -62,12 +62,6 @@ class SiteController extends Controller
     }
 
 
-    public function actionReact()
-    {
-        return $this->render('react');
-    }
-
-
     /**
      * Displays homepage.
      *
@@ -96,11 +90,14 @@ class SiteController extends Controller
 
             if ($role === 'user') {
                 $userModel = User::findByUsername($model->username);
+                Yii::$app->session->set('user_id', $userModel->id);
             } elseif ($role === 'doctor') {
                 $userModel = Doctor::findByUsername($model->username);
             } else {
                 $userModel = null;
             }
+
+            Yii::$app->session->set('user_id', $userModel->id);
 
             if ($userModel && Yii::$app->security->validatePassword($model->password, $userModel->password)) {
                 Yii::$app->user->login($userModel);
@@ -110,7 +107,7 @@ class SiteController extends Controller
                 return $this->render('login', [
                     'model' => $model,
                     'token' => $token,
-                    'role'  => $role,
+                    'role' => $role,
                 ]);
             } else {
                 $model->addError('password', 'Incorrect username or password.');
@@ -123,6 +120,12 @@ class SiteController extends Controller
         ]);
     }
 
+
+    public function actionReact()
+    {
+        // Ensure the path correctly points to the built React index.html file
+        return $this->renderPartial('@app/web/react/index.html');
+    }
 
 
     public function actionSignup()
@@ -158,6 +161,8 @@ class SiteController extends Controller
     }
 
 
+
+
     public function actionAddDetails()
     {
         // Get the current logged-in doctor's ID
@@ -173,7 +178,7 @@ class SiteController extends Controller
 
         if ($doctorDetail->load(Yii::$app->request->post()) && $doctorDetail->save()) {
             Yii::$app->session->setFlash('success', 'Doctor details saved successfully.');
-            return $this->redirect(['view', 'id' => $doctorId]);
+            return $this->redirect(['react', 'id' => $doctorId]);
         }
 
         return $this->render('add-details', [
@@ -191,8 +196,7 @@ class SiteController extends Controller
     public function actionLogout()
     {
         Yii::$app->user->logout();
-
-        return $this->goHome();
+        return $this->redirect('site/login');
     }
 
     /**
@@ -222,4 +226,20 @@ class SiteController extends Controller
     {
         return $this->render('about');
     }
+
+
+    public function actionDoctorList()
+    {
+        // Fetch the list of doctors with their details
+        $doctors = Doctor::find()
+            ->joinWith('doctorDetail') // Assuming 'doctorDetail' is the relation name
+            ->asArray()
+            ->all();
+
+        // Prepare the response
+        Yii::$app->response->format = Response::FORMAT_JSON;
+        return $doctors;
+    }
+
+
 }

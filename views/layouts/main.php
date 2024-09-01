@@ -61,7 +61,7 @@ $this->registerLinkTag(['rel' => 'icon', 'type' => 'image/x-icon', 'href' => Yii
                 Yii::$app->user->isGuest
                 ? ['label' => 'Login', 'url' => ['/site/login']]
                 : '<li class="nav-item">'
-                . Html::beginForm(['/site/logout'])
+                . Html::beginForm(['/site/logout'],'post')
                 . Html::submitButton(
                     'Logout (' . Yii::$app->user->identity->username . ')',
                     ['class' => 'nav-link btn btn-link logout']
@@ -85,6 +85,7 @@ $this->registerLinkTag(['rel' => 'icon', 'type' => 'image/x-icon', 'href' => Yii
                 logoutForm.addEventListener('submit', function () {
                     // Clear sessionStorage on logout
                     sessionStorage.removeItem('authToken');
+                    sessionStorage.removeItem('userId');
                 });
             }
         });

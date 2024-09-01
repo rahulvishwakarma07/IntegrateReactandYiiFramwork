@@ -3,7 +3,7 @@
 /** @var yii\web\View $this */
 /** @var yii\bootstrap5\ActiveForm $form */
 /** @var app\models\LoginForm $model */
-/** @var string|null $token */  
+/** @var string|null $token */
 
 use yii\bootstrap5\ActiveForm;
 use yii\bootstrap5\Html;
@@ -13,13 +13,17 @@ $this->title = 'Login';
 <div class="container" style="margin-top : 100px">
     <div class="row main">
         <!-- Left side -->
-        <div id="login-left" class="col-md-6 p-5 d-flex flex-column justify-content-evenly align-items-center" style="background-color: #0bcc96;">
+        <div id="login-left" class="col-md-6 p-5 d-flex flex-column justify-content-evenly align-items-center"
+            style="background-color: #0bcc96;">
             <div class="mt-3" style="border-radius: 50px; width: 100px; height: 100px; overflow: hidden;">
-                <img src="<?= \Yii::getAlias('@web') ?>/images/Green-flame-580x386.jpg" alt="Design Spacee Logo" style="width: 100%; height: 100%; object-fit: cover;" />
+                <img src="<?= \Yii::getAlias('@web') ?>/images/Green-flame-580x386.jpg" alt="Design Spacee Logo"
+                    style="width: 100%; height: 100%; object-fit: cover;" />
             </div>
             <h1 class="text-center text-white fw-bold mt-3">Welcome Back!</h1>
             <p class="text-center text-white">To stay connected with us<br>please login with your personal info</p>
-            <button class="mt-5 w-50 fw-bold" style="height: 40px; border-radius: 25px; border: none; color: #0bcc96; background-color: white;">Sign In</button>
+            <button class="mt-5 w-50 fw-bold"
+                style="height: 40px; border-radius: 25px; border: none; color: #0bcc96; background-color: white;">Sign
+                In</button>
             <h6 class="text-center text-white mt-5 mb-3">Rahul | Vishwakarma</h6>
         </div>
 
@@ -54,12 +58,12 @@ $this->title = 'Login';
                         <?= Html::submitButton('Log In', ['class' => 'mt-5 w-50 text-white fw-bold', 'style' => 'height: 40px; border-radius: 50px; background-color: #0bcc96; border: none;']) ?>
                     </div>
                     <h6 class="mt-3 text-secondary text-center">
-                            Don't have an account?
-                            <a href="<?= Yii::$app->urlManager->createUrl(['site/signup']) ?>" class="fw-bold"
-                                style="color:#0bcc96;">
-                                Signup
-                            </a>
-                        </h6>
+                        Don't have an account?
+                        <a href="<?= Yii::$app->urlManager->createUrl(['site/signup']) ?>" class="fw-bold"
+                            style="color:#0bcc96;">
+                            Signup
+                        </a>
+                    </h6>
 
                     <?php ActiveForm::end(); ?>
                 </div>
@@ -69,16 +73,19 @@ $this->title = 'Login';
 </div>
 
 <?php if (isset($token)): ?>
-<script>
-    // Store token in sessionStorage
-    sessionStorage.setItem('authToken', <?= json_encode($token) ?>);
+    <script>
+        // Store token in sessionStorage
+        sessionStorage.setItem('authToken', <?= json_encode($token) ?>);
+        
+        // Store user/doctor ID in sessionStorage
+        sessionStorage.setItem('userId', <?= json_encode(Yii::$app->session->get('user_id')) ?>);
 
-    // Check the role and redirect accordingly
-    const role = <?= json_encode($role) ?>;
-    if (role === 'doctor') {
-        window.location.href = '<?= \yii\helpers\Url::to(['site/add-details']) ?>';
-    } else {
-        window.location.href = '<?= \yii\helpers\Url::to(['site/index']) ?>';
-    }
-</script>
+        // Check the role and redirect accordingly
+        const role = <?= json_encode($role) ?>;
+        if (role === 'doctor') {
+            window.location.href = '<?= \yii\helpers\Url::to(['site/add-details']) ?>';
+        } else {
+            window.location.href = '<?= \yii\helpers\Url::to(['site/index']) ?>';
+        }
+    </script>
 <?php endif; ?>

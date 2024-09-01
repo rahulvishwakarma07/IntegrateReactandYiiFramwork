@@ -80,6 +80,13 @@ class User extends ActiveRecord implements IdentityInterface
         return static::findOne($id);
     }
 
+
+    public function getAppointments()
+    {
+        return $this->hasMany(Appointment::class, ['user_id' => 'id']);
+    }
+
+
     /**
      * Finds an identity by the given token.
      * @param string $token the token to be looked for

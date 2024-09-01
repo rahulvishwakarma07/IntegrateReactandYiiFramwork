@@ -1,4 +1,5 @@
 <?php
+use yii\filters\Cors;
 
 $params = require __DIR__ . '/params.php';
 $db = require __DIR__ . '/db.php';
@@ -15,6 +16,9 @@ $config = [
         'request' => [
             // !!! insert a secret key in the following (if it is empty) - this is required by cookie validation
             'cookieValidationKey' => 'hello',
+            'parsers' => [
+                'application/json' => \yii\web\JsonParser::class,
+            ]
         ],
         'cache' => [
             'class' => 'yii\caching\FileCache',
@@ -46,8 +50,26 @@ $config = [
             'enablePrettyUrl' => true,
             'showScriptName' => false,
             'rules' => [
-                'react' => 'site/react',
+                'react/<path:.*>' => 'site/react',
+                'DELETE logout' => 'user/logout',
+                'GET doctor' => 'doctor/index',
+                'GET count'  => 'doctor/count',
+                'GET userappointment/<id:\d+>' => 'appointment/user-appointment',
+                'POST doctordata/<id:\d+>' => 'doctor/doctor',
+                'POST booking' => 'appointment/book-appointment',
+                'POST update/<id:\d+>' => 'user/update',
+                'GET userget/<id:\d+>' => 'user/get-user',
+                'POST update-password/<id:\d+>' => 'user/update-password',
                 // other rules
+            ],
+        ],
+        'corsFilter' => [
+            'class' => Cors::class,
+            'cors' => [
+                'Origin' => ['*'], // Allows requests from any origin
+                'Access-Control-Request-Method' => ['*'], // Allows all methods
+                'Access-Control-Request-Headers' => ['*'], // Allows all headers
+                'Access-Control-Allow-Credentials' => true,
             ],
         ],
     ],

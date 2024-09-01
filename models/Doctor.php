@@ -151,5 +151,8 @@ class Doctor extends ActiveRecord implements IdentityInterface
     }
 
 
+    public function getAppointments()
+    {
+        return $this->hasMany(Appointment::class, ['doctor_id' => 'id']);
+    }
 }
-?>

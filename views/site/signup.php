@@ -25,7 +25,7 @@ use yii\widgets\ActiveForm;
                 <div class="mt-3" style="border-radius: 50px; width: 100px; height: 100px; overflow: hidden;">
                     <img src="<?= \Yii::getAlias('@web') ?>/images/Green-flame-580x386.jpg" alt="Design Spacee Logo"
                         style="width: 100%; height: 100%; object-fit: cover;" />
-                </div>
+                </div>  
                 <h1 class="text-center text-white fw-bold mt-3">Join Our Healthcare Community</h1>
                 <h2 class="text-center text-white">Empowering You with Comprehensive Health Solutions</h2>
 
